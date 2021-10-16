@@ -1,0 +1,43 @@
+SELECT no, firstName, lastName, birthdate FROM Guest;
+
+
+SELECT no, CONCAT(firstName,' ',lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(birthdate,'DD-MON-YY'))/12,1) AS AGE FROM Guest WHERE state='WI';
+
+Select G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE FROM Guest G INNER JOIN Members M ON M.no = G.no WHERE G.state = 'WI';
+
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+WHERE G.state = 'WI' AND V.roomtype = 'Luxury Suite' AND V.status!='C'
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE, CONCAT(V.checkin,' ',V.checkout,' ',v.roomtype) AS VISITS FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+WHERE G.state = 'WI' AND V.roomtype = 'Luxury Suite'
+
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE,COUNT(G.no) AS total_visits,SUM(DATEDIFF(V.checkout,V.checkin)) AS no_of_days,AVG(DATEDIFF(V.checkout,V.checkin)) AS avgdays FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+WHERE G.state = 'WI' AND V.roomtype = 'Luxury Suite'
+
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE,COUNT(G.no) AS total_visits,SUM(DATEDIFF(V.checkout,V.checkin)) AS no_of_days,AVG(DATEDIFF(V.checkout,V.checkin)) AS avgdays FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+WHERE G.state = 'WI' AND V.roomtype == 'Luxury Suite' HAVING COUNT(G.no)>1
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE,COUNT(G.no) AS total_visits,SUM(DATEDIFF(V.checkout,V.checkin)) AS no_of_days,AVG(DATEDIFF(V.checkout,V.checkin)) AS avgdays FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+WHERE G.state = 'WI' AND V.roomtype != 'Luxury Suite' HAVING COUNT(G.no)>1
+
+SELECT G.no, CONCAT(G.firstName,' ',G.lastName) AS NAME, ROUND(MONTHS_BETWEEN(sysdate, to_date(G.birthdate,'DD-MON-YY'))/12,1) AS AGE FROM Guest G 
+LEFT JOIN Member M ON G.no = M.no
+LEFT JOIN Visit V ON V.guestno = M.no
+
+
+Select V.confirmation,V.checkin,V.checkout,V.roomtype,V.room,R.floor,R.wing FROM Visit V INNER JOIN Room R ON R.no = V.room WHERE V.room ;
+
+
